@@ -10,12 +10,18 @@
         "lib/core.jar",
         "-d",
         "bin",
-        "src/mysketch/MainSketch.java"
+        "src/mysketch/*.java"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
+      "windows": {
+        "args": [
+          "-cp",
+          "lib\\core.jar",
+          "-d",
+          "bin",
+          "src\\mysketch\\*.java"
+        ]
       },
+      "group": { "kind": "build", "isDefault": true },
       "problemMatcher": []
     }
   ]
