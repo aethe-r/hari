@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile Sketch",
+      "type": "shell",
+      "command": "javac",
+      "args": [
+        "-cp",
+        "lib/core.jar",
+        "-d",
+        "bin",
+        "src/mysketch/MainSketch.java"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

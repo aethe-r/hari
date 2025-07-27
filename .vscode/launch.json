@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Processing Sketch",
+      "request": "launch",
+      "mainClass": "mysketch.MainSketch",
+      "cwd": "${workspaceFolder}",
+      "classPaths": [
+        "${workspaceFolder}/bin",
+        "${workspaceFolder}/lib/core.jar"
+      ],
+      "preLaunchTask": "Compile Sketch"
+    }
+  ]
+}
