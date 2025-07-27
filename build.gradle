@@ -1,0 +1,25 @@
+// build.gradle
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+// Use the local Processing core.jar you copied into lib/
+dependencies {
+    implementation files('lib/core.jar')
+}
+
+// Gradle 7+ uses 'mainClass'
+application {
+    mainClass = 'mysketch.MainSketch'
+}
+
+// (Optional) lock the bytecode level you want
+tasks.withType(JavaCompile).configureEach {
+    // match your Java runtime (21 is fine too)
+    options.release = 17
+}
