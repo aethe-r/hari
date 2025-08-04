@@ -5,7 +5,7 @@
       "type": "java",
       "name": "Run Processing Sketch",
       "request": "launch",
-      "mainClass": "mysketch.MainSketch",
+      "mainClass": "gamecode.MainSketch",
       "cwd": "${workspaceFolder}",
       "classPaths": [
         "${workspaceFolder}/bin",

@@ -1,1 +1,20 @@
-bin/
+# Processing build and export artifacts
+build/
+*.class
+*.exe
+*.app
+*.jar
+application.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Gradle wrappers or other build systems (if any)
+.gradle/
+
+# Images generated during run
+savedImages/
