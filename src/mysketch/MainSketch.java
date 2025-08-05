@@ -1,4 +1,4 @@
-package mysketch;
+package gamecode;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -119,6 +119,6 @@ public class MainSketch extends PApplet {
     }
 
     public static void main(String[] args) {
-        PApplet.main("mysketch.MainSketch");
+        PApplet.main("gamecode.MainSketch");
     }
 }

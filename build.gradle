@@ -15,7 +15,7 @@ dependencies {
 
 // Gradle 7+ uses 'mainClass'
 application {
-    mainClass = 'mysketch.MainSketch'
+    mainClass = 'gamecode.MainSketch'
 }
 
 // (Optional) lock the bytecode level you want

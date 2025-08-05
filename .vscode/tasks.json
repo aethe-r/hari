@@ -10,11 +10,26 @@
         "lib/core.jar",
         "-d",
         "bin",
-        "src/mysketch/MainSketch.java"
+        "src/gamecode/*.java"
       ],
       "problemMatcher": [],
       "group": {
         "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Sketch",
+      "type": "shell",
+      "command": "java",
+      "args": [
+        "-cp",
+        "bin:lib/core.jar",
+        "gamecode.MainSketch"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
         "isDefault": true
       }
     }
