@@ -6,11 +6,16 @@ import java.util.ArrayList;
 
 public class GameManager {
     PApplet p;
-    Player player;
+    public Player player;
     ArrayList<Zombie> zombies;
     int spawnInterval = 120;
+    public int highScore = 0;   // ✅ track best score
     int score = 0;
-    boolean gameOver = false;  // ✅ flag instead of using p.surface
+    boolean gameOver = false;
+
+    // ✅ Damage cooldown (frames)
+    int damageCooldown = 30; // ~0.5 sec at 60fps
+    int lastDamageFrame = -999;
 
     public GameManager(PApplet p) {
         this.p = p;
@@ -28,12 +33,18 @@ public class GameManager {
 
         for (Zombie z : zombies) {
             z.update(player);
-            if (Utils.circleCollide(player.pos, player.radius, z.pos, z.radius)) {
-                // simple collision handling
-                PVector push = PVector.sub(z.pos, player.pos);
-                player.pos.sub(push.mult(0.1f));
 
-                gameOver = true; // ✅ signal back instead of touching MainSketch
+            // ✅ Collision check
+            if (Utils.circleCollide(player.pos, player.radius, z.pos, z.radius)) {
+                // Only apply damage if cooldown expired
+                if (p.frameCount - lastDamageFrame > damageCooldown) {
+                    player.takeDamage(10);
+                    lastDamageFrame = p.frameCount;
+                }
+
+                if (player.isDead()) {
+                    gameOver = true;
+                }
             }
         }
 
@@ -47,9 +58,27 @@ public class GameManager {
         for (Zombie z : zombies) {
             z.display();
         }
+
+        // ✅ Score
         p.fill(0);
         p.textAlign(PApplet.LEFT, PApplet.TOP);
         p.text("Score: " + score, 10, 10);
+
+        // ✅ Health bar
+        float barWidth = 200;
+        float barHeight = 20;
+        float healthRatio = (float) player.health / player.maxHealth;
+
+        p.noStroke();
+        p.fill(150);
+        p.rect(10, 40, barWidth, barHeight);
+
+        p.fill(255, 0, 0);
+        p.rect(10, 40, barWidth * healthRatio, barHeight);
+
+        p.stroke(0);
+        p.noFill();
+        p.rect(10, 40, barWidth, barHeight);
     }
 
     public void reset() {

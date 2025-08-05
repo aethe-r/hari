@@ -7,12 +7,8 @@ import processing.event.MouseEvent;
 public class MainSketch extends PApplet {
 
   GameManager manager;
-
-  enum GameState {
-    START, PLAY, GAME_OVER
-  }
-
-  GameState gameState = GameState.START;
+  MenuManager menu;
+  GameState gameState = GameState.MAIN_MENU;
 
   public void settings() {
     size(800, 600);
@@ -20,53 +16,90 @@ public class MainSketch extends PApplet {
 
   public void setup() {
     manager = new GameManager(this); // ✅ pass PApplet reference
+    menu = new MenuManager(this, manager); // ✅ initialize
     textAlign(CENTER, CENTER);
     textSize(20);
   }
 
   public void draw() {
     background(255);
+
     switch (gameState) {
-      case START:
-        displayStart();
+      case MAIN_MENU:
+      case OPTIONS:
+      case PAUSE:
+      case GAME_OVER:
+        manager.display(); // keep background visible
+        menu.display(gameState);
         break;
+
       case PLAY:
         manager.update();
         manager.display();
-        break;
-      case GAME_OVER:
-        manager.display();
-        displayGameOver();
+        if (manager.gameOver) {
+          gameState = GameState.GAME_OVER;
+        }
         break;
     }
   }
 
   // public void keyPressed() {
-  //   if (gameState == GameState.START && keyCode == ENTER) {
-  //     gameState = GameState.PLAY;
-  //   } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
-  //     manager.reset();
-  //     gameState = GameState.START;
-  //   }
+  // if (gameState == GameState.START && keyCode == ENTER) {
+  // gameState = GameState.PLAY;
+  // } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
+  // manager.reset();
+  // gameState = GameState.START;
+  // }
   // }
   public void keyPressed() {
-      if (gameState == GameState.PLAY) {
-          manager.player.handleKeyPressed(key, keyCode); // forward to Player
-      }
-
-      // existing game state controls (ENTER, R, etc.)
-      if (gameState == GameState.START && keyCode == ENTER) {
-          gameState = GameState.PLAY;
-      } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
+    switch (gameState) {
+      case MAIN_MENU:
+        if (keyCode == ENTER) {
           manager.reset();
-          gameState = GameState.START;
-      }
+          gameState = GameState.PLAY;
+        } else if (key == 'o' || key == 'O') {
+          gameState = GameState.OPTIONS;
+        } else if (keyCode == ESC) {
+          exit();
+        }
+        break;
+
+      case OPTIONS:
+        if (key == 'm' || key == 'M') {
+          gameState = GameState.MAIN_MENU;
+        }
+        break;
+
+      case PLAY:
+        manager.player.handleKeyPressed(key, keyCode);
+        if (key == 'p' || key == 'P') {
+          gameState = GameState.PAUSE;
+        }
+        break;
+
+      case PAUSE:
+        if (key == 'p' || key == 'P') {
+          gameState = GameState.PLAY;
+        } else if (key == 'm' || key == 'M') {
+          gameState = GameState.MAIN_MENU;
+        }
+        break;
+
+      case GAME_OVER:
+        if (key == 'r' || key == 'R') {
+          manager.reset();
+          gameState = GameState.PLAY;
+        } else if (key == 'm' || key == 'M') {
+          gameState = GameState.MAIN_MENU;
+        }
+        break;
+    }
   }
 
   public void keyReleased() {
-      if (gameState == GameState.PLAY) {
-          manager.player.handleKeyReleased(key, keyCode); // forward to Player
-      }
+    if (gameState == GameState.PLAY) {
+      manager.player.handleKeyReleased(key, keyCode);
+    }
   }
 
   public void displayStart() {
