@@ -41,13 +41,32 @@ public class MainSketch extends PApplet {
     }
   }
 
+  // public void keyPressed() {
+  //   if (gameState == GameState.START && keyCode == ENTER) {
+  //     gameState = GameState.PLAY;
+  //   } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
+  //     manager.reset();
+  //     gameState = GameState.START;
+  //   }
+  // }
   public void keyPressed() {
-    if (gameState == GameState.START && keyCode == ENTER) {
-      gameState = GameState.PLAY;
-    } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
-      manager.reset();
-      gameState = GameState.START;
-    }
+      if (gameState == GameState.PLAY) {
+          manager.player.handleKeyPressed(key, keyCode); // forward to Player
+      }
+
+      // existing game state controls (ENTER, R, etc.)
+      if (gameState == GameState.START && keyCode == ENTER) {
+          gameState = GameState.PLAY;
+      } else if (gameState == GameState.GAME_OVER && (key == 'r' || key == 'R')) {
+          manager.reset();
+          gameState = GameState.START;
+      }
+  }
+
+  public void keyReleased() {
+      if (gameState == GameState.PLAY) {
+          manager.player.handleKeyReleased(key, keyCode); // forward to Player
+      }
   }
 
   public void displayStart() {
