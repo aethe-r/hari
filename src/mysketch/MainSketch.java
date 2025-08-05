@@ -112,11 +112,11 @@ public class MainSketch extends PApplet {
         popStyle();
     }
 
-    @Override
-    public void exit() {
-        // Add any cleanup code here if needed
-        super.exit(); // <-- This actually closes the window
-    }
+    // @Override
+    // public void exit() {
+    //     // Add any cleanup code here if needed
+    //     super.exit(); // <-- This actually closes the window
+    // }
 
     public static void main(String[] args) {
         PApplet.main("gamecode.MainSketch");
