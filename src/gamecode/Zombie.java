@@ -35,7 +35,7 @@ public class Zombie {
         p.pushMatrix();
         p.translate(pos.x, pos.y);
 
-        if (!facingLeft) {
+        if (facingLeft) {
             p.scale(-1, 1); // flip horizontally
         }
 

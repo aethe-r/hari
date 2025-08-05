@@ -51,6 +51,7 @@ public class MainSketch extends PApplet {
   // gameState = GameState.START;
   // }
   // }
+  @Override
   public void keyPressed() {
     switch (gameState) {
       case MAIN_MENU:
@@ -96,10 +97,17 @@ public class MainSketch extends PApplet {
     }
   }
 
+  @Override
   public void keyReleased() {
     if (gameState == GameState.PLAY) {
       manager.player.handleKeyReleased(key, keyCode);
     }
+  }
+
+  @Override
+  public void mousePressed() {
+    // forward mouse clicks to the menu system
+    gameState = menu.handleMouseClick(gameState);
   }
 
   public void displayStart() {

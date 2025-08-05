@@ -75,7 +75,7 @@ public class Player {
     public void display() {
         p.pushMatrix();
         p.translate(pos.x, pos.y);
-        if (!facingLeft) {
+        if (facingLeft) {
             p.scale(-1, 1); // flip horizontally
         }
         p.imageMode(PApplet.CENTER);

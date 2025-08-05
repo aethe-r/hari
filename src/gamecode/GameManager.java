@@ -8,19 +8,23 @@ public class GameManager {
     PApplet p;
     public Player player;
     ArrayList<Zombie> zombies;
-    int spawnInterval = 120;
-    public int highScore = 0;   // ✅ track best score
-    int score = 0;
-    boolean gameOver = false;
 
-    // ✅ Damage cooldown (frames)
-    int damageCooldown = 30; // ~0.5 sec at 60fps
+    ArrayList<PowerUp> powerUps;
+    int powerUpSpawnInterval = 600; // 600: spawn every ~10 sec
+
+    int spawnInterval = 120;
+    public int score = 0;
+    public int highScore = 0;   // ✅ track best score
+    public boolean gameOver = false;
+
+    int damageCooldown = 30;
     int lastDamageFrame = -999;
 
     public GameManager(PApplet p) {
         this.p = p;
         player = new Player(p);
         zombies = new ArrayList<>();
+        powerUps = new ArrayList<>();
         spawnWave();
     }
 
@@ -28,23 +32,37 @@ public class GameManager {
         if (p.frameCount % spawnInterval == 0) {
             spawnWave();
         }
+        if (p.frameCount % powerUpSpawnInterval == 0) {
+            spawnRandomPowerUp();
+        }
 
         player.update();
 
         for (Zombie z : zombies) {
             z.update(player);
 
-            // ✅ Collision check
             if (Utils.circleCollide(player.pos, player.radius, z.pos, z.radius)) {
-                // Only apply damage if cooldown expired
                 if (p.frameCount - lastDamageFrame > damageCooldown) {
                     player.takeDamage(10);
                     lastDamageFrame = p.frameCount;
                 }
 
                 if (player.isDead()) {
+                    // ✅ update highscore when player dies
+                    if (score > highScore) {
+                        highScore = score;
+                    }
                     gameOver = true;
                 }
+            }
+        }
+
+        // check powerup collection
+        for (int i = powerUps.size() - 1; i >= 0; i--) {
+            PowerUp pu = powerUps.get(i);
+            if (pu.checkCollision(player)) {
+                pu.applyEffect(player);
+                powerUps.remove(i); // remove after pickup
             }
         }
 
@@ -55,9 +73,8 @@ public class GameManager {
 
     public void display() {
         player.display();
-        for (Zombie z : zombies) {
-            z.display();
-        }
+        for (Zombie z : zombies) z.display();
+        for (PowerUp pu : powerUps) pu.display();
 
         // ✅ Score
         p.fill(0);
@@ -87,6 +104,12 @@ public class GameManager {
         score = 0;
         gameOver = false;
         spawnWave();
+    }
+
+    private void spawnRandomPowerUp() {
+        String[] types = {"heart", "speed", "shield"};
+        int idx = (int) p.random(types.length);
+        powerUps.add(new PowerUp(p, types[idx]));
     }
 
     void spawnWave() {
